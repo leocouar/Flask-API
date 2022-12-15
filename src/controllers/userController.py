@@ -31,7 +31,6 @@ def getUser(id):
             return jsonify(usuario)
         except:
             return jsonify({'result':"error al buscar el usuario"})
-
 #POST USER
 @userContoller.route('/', methods=["GET","POST"])   
 def saveUser():
@@ -81,3 +80,15 @@ def updateUser(id):
         except:
                 return jsonify({'result':"no se pudo modificar usuario"}), 400
         
+#Login de usuario
+@userContoller.route('/login', methods=["GET","POST"])
+def login():
+    with Session(engine) as session:
+            data = request.json
+            username= data['username']
+            password= data['password']
+            usuario= select(Users).where(Users.Username == username)
+            # usuario = session.query(Users.Username).filter(Users.Username == username)
+            esto = session.scalars(usuario)
+            return jsonify({'result': 'Ok'})
+    
